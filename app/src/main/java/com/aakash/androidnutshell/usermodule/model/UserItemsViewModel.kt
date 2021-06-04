@@ -26,48 +26,46 @@ class UserItemsViewModel(var apiService: ApiEndPoint) : ViewModel(), LifecycleOb
     }
 
     private val compositeDisposable = CompositeDisposable()
-    private val liveData = MutableLiveData<CommonApiResponse<ArrayList<UserItemResponse>>>()
+    private val userListLiveData = MutableLiveData<CommonApiResponse<ArrayList<UserItemResponse>>>()
+    private val singleUserLiveData = MutableLiveData<CommonApiResponse<UserItemResponse>>()
 
-    fun getLiveData()  = liveData
+    fun getUserListLiveData()  = userListLiveData
+
+    fun getSingleUserLiveData() = singleUserLiveData
 
     fun fetchUsers() {
         if (AppApplication.getInstance().hasNetworkConnection()) {
-            liveData.value = CommonApiResponse(progress = true)
+            userListLiveData.value = CommonApiResponse(progress = true)
 
             val disposable = apiService.fetchUsers()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ item ->
-                    liveData.value = CommonApiResponse(response = item)
+                    userListLiveData.value = CommonApiResponse(response = item)
                 }, {
-                    liveData.value = CommonApiResponse(error = Pair(-1,""))
+                    userListLiveData.value = CommonApiResponse(error = Pair(-1,""))
                 })
             compositeDisposable.add(disposable)
         } else {
-            liveData.value = CommonApiResponse(error = Pair(Constants.ErrorStates.NETWORK_ERROR, ""))
+            userListLiveData.value = CommonApiResponse(error = Pair(Constants.ErrorStates.NETWORK_ERROR, ""))
         }
     }
 
-    fun fetchSingleUser() {
+    fun fetchSingleUser(login: String) {
         if (AppApplication.getInstance().hasNetworkConnection()) {
-            liveData.value = CommonApiResponse(progress = true)
+            userListLiveData.value = CommonApiResponse(progress = true)
 
-            val disposable = apiService.fetchUsers()
-                .observeOn(Schedulers.io())
-                .switchMap { itemList ->
-                    apiService.fetchUser(itemList[0].login ?: "")
-                        .materialize()
-                }
+            val disposable = apiService.fetchUser(login)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ item ->
-                    println("value = ${Objects.toString(item)}")
+                    singleUserLiveData.value = CommonApiResponse(response = item)
                 }, {
-                    liveData.value = CommonApiResponse(error = Pair(-1,""))
+                    userListLiveData.value = CommonApiResponse(error = Pair(-1,""))
                 })
             compositeDisposable.add(disposable)
         } else {
-            liveData.value = CommonApiResponse(error = Pair(Constants.ErrorStates.NETWORK_ERROR, ""))
+            userListLiveData.value = CommonApiResponse(error = Pair(Constants.ErrorStates.NETWORK_ERROR, ""))
         }
 
     }

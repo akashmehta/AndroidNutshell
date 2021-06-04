@@ -8,7 +8,8 @@ import android.widget.TextView
 import com.aakash.androidnutshell.usermodule.dto.UserItemResponse
 import com.aakash.androidnutshell.R
 
-class UserItemsListAdapter(private val itemList: ArrayList<UserItemResponse>) :
+class UserItemsListAdapter(private val itemList: ArrayList<UserItemResponse>,
+                           private val onItemClick: (position: Int) -> Unit) :
     RecyclerView.Adapter<UserItemsListAdapter.ViewHolder>() {
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view)
 
@@ -24,6 +25,7 @@ class UserItemsListAdapter(private val itemList: ArrayList<UserItemResponse>) :
         holder.view.apply {
             if (this is TextView) {
                 text = item.login
+                setOnClickListener { onItemClick(position) }
             }
         }
     }

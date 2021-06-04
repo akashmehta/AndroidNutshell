@@ -17,7 +17,7 @@ class Constants {
 
     class BundleKeys {
         companion object {
-            const val SEARCH_URL = "searchUrl"
+            const val USER_INFO_SCREEN_DATA = "userInfoScreenData"
         }
     }
 }
