@@ -1,5 +1,6 @@
 package com.aakash.androidnutshell.usermodule.ui
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -7,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aakash.androidnutshell.AppApplication
 import com.aakash.androidnutshell.R
+import com.aakash.androidnutshell.SampleActivity
 import com.aakash.androidnutshell.userinfo.dto.UserInfoScreenData
 import com.aakash.androidnutshell.userinfo.ui.UserInfoFragment
 import com.aakash.androidnutshell.usermodule.dto.UserItemResponse
@@ -32,6 +34,16 @@ class UserItemsActivity : AppCompatActivity(){
 
     override fun invalidateOptionsMenu() {
         super.invalidateOptionsMenu()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        println("UserItemsActivity.onRestart")
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        println("UserItemsActivity.onNewIntent")
     }
 
     @Inject
@@ -82,6 +94,9 @@ class UserItemsActivity : AppCompatActivity(){
         })
         btnClick.setOnClickListener {
             userViewModel.fetchUsers()
+        }
+        btnOpen.setOnClickListener {
+            startActivity(Intent(this, SampleActivity::class.java))
         }
     }
 

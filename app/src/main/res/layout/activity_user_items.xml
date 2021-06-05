@@ -16,6 +16,14 @@
             android:textColor="@color/white"
             android:text="click"
             android:id="@+id/btnClick"/>
+        <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:textColor="@color/white"
+        android:text="open"
+        android:id="@+id/btnOpen"/>
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
